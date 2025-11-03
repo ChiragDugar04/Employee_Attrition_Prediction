@@ -40,6 +40,7 @@ Employee attrition is a critical challenge for organizations. This project predi
 ---
 
 ## 📁 Project Structure
+```
 Employee_Attrition_Prediction/
 │
 ├─ app/
@@ -56,7 +57,7 @@ Employee_Attrition_Prediction/
 │
 ├─ requirements.txt
 └─ README.md
-
+```
 
 ---
 
