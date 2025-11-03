@@ -22,7 +22,7 @@ def load_model():
     model = joblib.load(MODEL_PATH)
     return model
 
-# --- Helper function (no change) ---
+
 def get_feature_description(feature_name):
     descriptions = {
         "OverTime_No": "Working Overtime",
@@ -61,7 +61,7 @@ if uploaded_file:
     df_results["Attrition_Prob"] = probs
     df_results["Attrition_Pred"] = preds
 
-    # --- High-Level Summary (no change) ---
+   
     st.subheader("📈 High-Level Summary")
     total_employees = len(df_results)
     at_risk_count = df_results['Attrition_Pred'].sum()
@@ -72,7 +72,7 @@ if uploaded_file:
     col2.metric("High Attrition Risk", f"{at_risk_count} employees")
     col3.metric("Overall Attrition Rate", f"{at_risk_percent:.1f}%")
     
-    # --- High-Risk Employees Table (no change) ---
+    
     st.subheader("🚨 High-Risk Employees (Top 20)")
     high_risk_df = df_results[df_results['Attrition_Pred'] == 1].sort_values(
         by="Attrition_Prob", ascending=False
@@ -81,7 +81,7 @@ if uploaded_file:
     display_cols = [col for col in cols_to_show if col in high_risk_df.columns]
     st.dataframe(high_risk_df[display_cols].head(20))
 
-    # --- SHAP Setup (no change) ---
+    
     st.header("🔬 Model Explanations (SHAP)")
     preprocessor = model.named_steps["preproc"]
     clf = model.named_steps["clf"]
@@ -97,7 +97,7 @@ if uploaded_file:
     explainer = shap.TreeExplainer(clf)
     shap_values = explainer(X_transformed_df) 
 
-    # --- HR-Friendly Global Summary ---
+    
     st.subheader("🌍 Key Drivers of Attrition (Company-Wide)")
     st.info("""
     **What this is:** This section shows the **Top 5 factors** that have the biggest
@@ -111,7 +111,7 @@ if uploaded_file:
 
     st.markdown("#### Top 5 Most Impactful Factors:")
     
-    # --- Top 5 Factors (Fixed text wrapping) ---
+    
     cols = st.columns(5)
     top_5_features = feature_impact['Feature'].head(5).tolist()
     
@@ -120,9 +120,7 @@ if uploaded_file:
             st.markdown(f"**#{i+1} Driver**")
             st.markdown(get_feature_description(feature))
 
-    # --- FIX: Split into two expanders ---
-
-    # --- Expander 1: Instructions ---
+    
     with st.expander("How to Read the Global SHAP Plot"):
         st.markdown("""
         **How to Read This Chart:**
@@ -149,17 +147,16 @@ if uploaded_file:
         3.  This means: **Not working overtime strongly decreases the risk** of an employee leaving.
         """)
 
-    # --- Expander 2: The Plot ---
+    
     with st.expander("View Global Feature Importance Plot"):
         fig, ax = plt.subplots(figsize=(8, 6))
         shap.summary_plot(shap_values, X_transformed_df, show=False)
         st.pyplot(fig, use_container_width=True)
         plt.close(fig)
 
-    # --- END OF FIX ---
+   
 
 
-    # --- HR-Friendly Local Summary ---
     st.subheader("🔍 Individual Employee Risk Analysis")
     st.info("""
     **What this is:** This section explains *why* a specific employee is at risk.
@@ -168,14 +165,13 @@ if uploaded_file:
 
     high_risk_options = {}
     for idx in high_risk_df.index:
-        # Get EmployeeNumber and JobRole from the high_risk dataframe
-        emp_id = high_risk_df.loc[idx].get('EmployeeNumber', f'Row {idx}') # Fallback to row index
+        emp_id = high_risk_df.loc[idx].get('EmployeeNumber', f'Row {idx}') 
         job_role = high_risk_df.loc[idx].get('JobRole', 'N/A')
         
-        # Create the label the HR user will see
+        
         label = f"EmpID: {emp_id} - {job_role}"
         
-        # Map the readable label to the internal row index (idx)
+       
         high_risk_options[label] = idx
 
     
@@ -187,26 +183,22 @@ if uploaded_file:
             options=high_risk_options.keys()
         )
         
-        # Get the internal row index (e.g., 463) from the selected label
+        
         emp_idx = high_risk_options[selected_employee_label]
 
-        # Get the EmployeeNumber (e.g., 622) to display in the title
+        
         selected_emp_number = df.loc[emp_idx].get('EmployeeNumber', emp_idx)
         
-        # Update the title to be more HR-friendly
-        # It now shows both EmpID and Row index for clarity
         st.markdown(f"**Showing analysis for EmployeeID: {selected_emp_number} (Row {emp_idx})**")
-    # --- END OF FIX ---
+    
 
-
-        # Get this employee's SHAP values and feature names
         emp_shap_values = shap_values.values[emp_idx]
         emp_risk_factors = pd.DataFrame({
             'Feature': all_feature_names,
             'SHAP_Value': emp_shap_values
         }).sort_values(by="SHAP_Value", ascending=False)
 
-        # Separate into risk (positive) and retention (negative) factors
+       
         top_risk_factors = emp_risk_factors[emp_risk_factors['SHAP_Value'] > 0].head(3)
         top_retention_factors = emp_risk_factors[emp_risk_factors['SHAP_Value'] < 0].tail(3).iloc[::-1]
 
@@ -221,7 +213,7 @@ if uploaded_file:
             for _, row in top_retention_factors.iterrows():
                 st.success(f"**{get_feature_description(row['Feature'])}**")
 
-        # --- Local plot expander (no change) ---
+        
         with st.expander("View Technical Waterfall Plot"):
             st.markdown("""
             **How to read this plot:**
