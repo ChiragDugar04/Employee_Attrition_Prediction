@@ -9,6 +9,36 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.data.preprocess import split_features_target, create_preprocessor
 
+st.set_page_config(page_title="Employee Attrition Prediction", layout="wide")
+
+st.markdown("""
+<style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    div[data-testid="stError"] {
+        background-color: rgba(255, 43, 43, 0.1);
+        border: 1px solid rgba(255, 43, 43, 0.4);
+        border-radius: 10px;
+        padding: 10px 10px 10px 15px;
+        margin-bottom: 10px;
+    }
+    div[data-testid="stSuccess"] {
+        background-color: rgba(4, 217, 128, 0.1);
+        border: 1px solid rgba(4, 217, 128, 0.4);
+        border-radius: 10px;
+        padding: 10px 10px 10px 15px;
+        margin-bottom: 10px;
+    }
+    div[data-testid="stInfo"] {
+        background-color: rgba(0, 104, 201, 0.1);
+        border: 1px solid rgba(0, 104, 201, 0.4);
+        border-radius: 10px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
 @st.cache_resource
 def load_model():
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -39,7 +69,6 @@ def get_feature_description(feature_name):
 
 model = load_model()
 
-st.set_page_config(page_title="Employee Attrition Prediction", layout="wide")
 st.title("👩‍💼 Employee Attrition Prediction Dashboard")
 st.markdown("Upload employee dataset and view attrition risk + explanations.")
 
@@ -61,7 +90,7 @@ if uploaded_file:
     df_results["Attrition_Prob"] = probs
     df_results["Attrition_Pred"] = preds
 
-   
+    
     st.subheader("📈 High-Level Summary")
     total_employees = len(df_results)
     at_risk_count = df_results['Attrition_Pred'].sum()
@@ -154,7 +183,7 @@ if uploaded_file:
         st.pyplot(fig, use_container_width=True)
         plt.close(fig)
 
-   
+    
 
 
     st.subheader("🔍 Individual Employee Risk Analysis")
