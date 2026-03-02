@@ -7,7 +7,7 @@ An end-to-end machine learning system to predict employee attrition and provide 
 
 ## 🚀 Project Overview
 
-Employee attrition is a critical challenge for organizations. This project predicts which employees are at risk of leaving and provides HR actionable insights using:
+Employee attrition is a critical challenge for organization. This project predicts which employees are at risk of leaving and provides HR actionable insights using:
 
 - **Machine Learning Models:** XGBoost, LightGBM, RandomForest, Logistic Regression
 - **Explainability:** SHAP for global and local feature importance
