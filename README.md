@@ -12,7 +12,7 @@ Employee attrition is a critical challenge for organization. This project predic
 - **Machine Learning Models:** XGBoost, LightGBM, RandomForest, Logistic Regression
 - **Explainability:** SHAP for global and local feature importance
 - **Hyperparameter Optimization:** Optuna for tuning model performance
-- **Interactive Dashboard:** Streamlit for uploading datasets, predicting attrition, and visualizing explanations
+- **Interactive Dashboard:** Streamlit for uploading datasets, predicting attrition, and visualizing explanations.
 
 ---
 
